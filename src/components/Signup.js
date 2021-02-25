@@ -26,7 +26,7 @@ function Signup() {
             })
             .then(async ()=>{
                 
-                var userDocRef = db.collection("users").doc(userAuth.user.email);
+                var userDocRef = db.collection("users").doc(userAuth.user.uid);
                 userDocRef.set({
                         'info':{
                         email: userAuth.user.email,
