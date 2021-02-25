@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect,Fragment } from 'react'
 import {useDispatch,useSelector} from 'react-redux'
 import { login, logout, selectUser } from './features/userSlice';
 import { auth } from './firebase';
@@ -7,6 +7,10 @@ import Header from './components/Header'
 import Signup from './components/Signup'
 import Login from './components/Login'
 import Sidebar from './components/Sidebar'
+import Routes from './Routing/Routes'
+import Dashboard from './pages/Dashboard';
+
+
 export default function App() {
   // eslint-disable-next-line no-unused-vars
   const user = useSelector(selectUser);
@@ -65,13 +69,22 @@ export default function App() {
 
         </div>
       ) : (
-        <div className="app_body">
+       
+       <Fragment>
+       <Routes>
+         <Dashboard />
+           {/* <Editor /> */}
+         {/* </Dashboard> */}
+
+       </Routes>
+      
 
          
           <h1>Logged in </h1>
-         
+          <div className="app_body">
           <button onClick={()=>dispatch(logout())}>Logout </button>
         </div>
+        </Fragment>
       )}
       
     {/* </div> */}
