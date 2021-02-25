@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect} from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { login } from '../features/userSlice';
 import { auth } from '../firebase';
 
 
 function Login() {
-
+ 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     // const [name, setName] = useState('');
@@ -25,7 +25,8 @@ function Login() {
             profileUrl: userAuth.user.photoURL,
           }))
         })
-        .then(()=><Redirect to="/dashboard" />)
+        .then(()=>{return (<Redirect to="/dashboard" />)})
+      
         .catch(error => alert(error));
     };
   
