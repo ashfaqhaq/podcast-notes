@@ -7,8 +7,10 @@ import Header from './components/Header'
 import Signup from './components/Signup'
 import Login from './components/Login'
 import Sidebar from './components/Sidebar'
+import Landing from './Pages/Landing'
+
 // import Routes from './Routing/Routes'
-import Dashboard from './pages/Dashboard';
+import Dashboard from './Pages/Dashboard';
 
 const Routes = React.lazy(()=>import("./Routing/Routes"))
 export default function App() {
@@ -16,30 +18,30 @@ export default function App() {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    auth.onAuthStateChanged(userAuth => {
-      if (userAuth) {
-        // user is logged in
-        console.log(userAuth.uid)
-        dispatch(login({
-          email: userAuth.email,
-          uid: userAuth.uid,
-          displayName: userAuth.displayName,
-          photoUrl: userAuth.photoURL,
-        }))
-      } else {
-        // use is logged out
-        dispatch(logout());
-      }
-    })
-  }, [dispatch]);
+  // useEffect(() => {
+  //   auth.onAuthStateChanged(userAuth => {
+  //     if (userAuth) {
+  //       // user is logged in
+  //       console.log(userAuth.uid)
+  //       dispatch(login({
+  //         email: userAuth.email,
+  //         uid: userAuth.uid,
+  //         displayName: userAuth.displayName,
+  //         photoUrl: userAuth.photoURL,
+  //       }))
+  //     } else {
+  //       // use is logged out
+  //       dispatch(logout());
+  //     }
+  //   })
+  // }, [dispatch]);
 
 
 
   return (
-    <Suspense fallback={
-    <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fsezeromer.com%2Fen%2Fxamarin-forms-gif-loading-ikonu%2F&psig=AOvVaw0v7CKEG5x_xbrNZ7LKrytZ&ust=1614402236323000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCKD5hZTjhu8CFQAAAAAdAAAAABAD" />}>
-    <div>
+    // <Suspense fallback={ }>
+   
+    <div className="box-border font-montserrat">
       <Header />
 
      
@@ -63,6 +65,7 @@ export default function App() {
 
       {!user ? (
         <div>
+          <Landing />
            <Login />
 
            <Signup/>
@@ -84,7 +87,8 @@ export default function App() {
          
           <h1>Logged in </h1>
           <div className="app_body">
-          <button onClick={()=>dispatch(logout())}>Logout </button>
+         
+          <button onClick={()=> auth().signOut().then(()=>dispatch(logout()))}>Logout </button>
         </div>
         </Fragment>
       )}
@@ -94,6 +98,6 @@ export default function App() {
 
     <Footer />
     </div>
-    </Suspense>
+    /* </Suspense> */
   )
 }
