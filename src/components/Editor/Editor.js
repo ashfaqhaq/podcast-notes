@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef,useCallback } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { db } from '../../firebase'
 import store from '../../app/store';
 import Editor from "rich-markdown-editor";
@@ -8,25 +8,26 @@ import { writeID, removeID } from '../../features/spotifyIdSlice';
 import _ from 'lodash';
 import { selectSpotifyID } from '../../features/spotifyIdSlice';
 function _Editor() {
+    
+    
     const getAccessToken = async () => {
-        
+
         const res = await axios.get('http://localhost:8888/refresh_token');
-       
+
         console.log(res.data.access_token)
-      
+
     }
 
-const id = useSelector(selectSpotifyID)
-console.log(id)
+    const id = useSelector(selectSpotifyID)
+    console.log(id)
     const [content, setContent] = useState("");
     const [fileName, setFileName] = useState("");
     const [isLoaded, setIsLoaded] = useState(false);
-   
+
     const [unsaveChanges, setUnsaveChanges] = useState(false);
     const [noteID, setNoteID] = useState(null);
     const contentRef = useRef(null);
     const fileNameRef = useRef(null);
-    const dispatch = useDispatch()
     useEffect(() => {
         const fetchData = async () => {
             const { user } = store.getState().user;
@@ -36,7 +37,7 @@ console.log(id)
                 uniqueURI: uriInput || new Date().getUTCMilliseconds()
             };
             console.log(spotify.uniqueURI.toString())
-            dispatch(writeID(spotify.uniqueURI.toString()))
+           
             const noteDocRef = await db.collection("users").doc(user.uid).collection("notes").doc(spotify.uniqueURI.toString());
             //   console.log(await noteDocRef
             const doc = await noteDocRef.get()
@@ -58,17 +59,13 @@ console.log(id)
 
         }
         fetchData()
-    }, [dispatch])
-   
-//   function(){
+    }, [])
 
-//   }
+  
 
     function saveToDb() {
         const { user } = store.getState().user;
-      const {id} = (store.getState().spotifyID)
-      console.warn("id from")
-       const noteDocRef =  db.collection("users").doc(user.uid).collection("notes").doc(id);
+        const noteDocRef = db.collection("users").doc(user.uid).collection("notes").doc(id);
         console.log(content)
         noteDocRef.update({
             name: fileName,
@@ -76,63 +73,48 @@ console.log(id)
             lastModified: new Date()
         });
         setUnsaveChanges(false)
-        console.warn("sabed changes from autosave?")       
     }
-   
-
-const callApi = () => saveToDb();
-const [debouncedCallApi] = useState(() => _.debounce(callApi, 1000));
-function handleChanges() { 
-    
-    debouncedCallApi(); 
-  }
 
 
-    
+
+
     const onUnload = (event) => {
         event.preventDefault();
         event.returnValue = "You have unsaved changes!";
         return "You have unsaved changes!";
-      };
+    };
     useEffect(() => {
         if (unsaveChanges) {
-          window.addEventListener("beforeunload", onUnload);
+            window.addEventListener("beforeunload", onUnload);
         } else {
-          window.removeEventListener("beforeunload", onUnload);
+            window.removeEventListener("beforeunload", onUnload);
         }
-    
+
         return () => window.removeEventListener("beforeunload", onUnload);
-      });
+    });
 
     return (
         <div>
 
             <button onClick={getAccessToken}> Get access token </button>
             <input ref={fileNameRef} value={fileName} onChange={(e) => { setFileName(e.target.value) }} />
-
-
-
             <button onClick={saveToDb}>
                 Save
             </button>
-
-
-
             <h2> Give text input here : </h2>
-            {isLoaded ? <Editor
-
+            {isLoaded ?
+            
+            <Editor
                 defaultValue={content}
                 ref={contentRef}
                 onChange={(getValue) => {
-                     setContent(getValue())
-                     setUnsaveChanges(true)
-                        handleChanges()
-                        // autoSave()
-                    }
-                    //  ()=>{console.log("value is changed")}
+                    setContent(getValue())
+                    setUnsaveChanges(true)
+                  }
+                   
                 }
 
-            // uploadImage={uploadImage}
+         
             // onShowToast={(message) => toast(message)}
             /> : <h2>Loading....</h2>}
 
@@ -140,10 +122,10 @@ function handleChanges() {
             <button onClick={() => console.log(store.getState())}>
                 Get store value
             </button>
-            <button onClick={()=>{console.log(unsaveChanges)}}>
+            <button onClick={() => { console.log(unsaveChanges) }}>
                 is it saved?
             </button>
-            <button onClick={() => console.log(contentRef.current.value.state.doc)}>
+            <button onClick={() => console.log(content)}>
                 Get content
             </button>
 
