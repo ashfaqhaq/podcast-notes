@@ -1,47 +1,32 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef,useCallback } from 'react'
 import { db } from '../../firebase'
 import store from '../../app/store';
 import Editor from "rich-markdown-editor";
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { writeID, removeID } from '../../features/spotifyIdSlice';
+import _ from 'lodash';
+import { selectSpotifyID } from '../../features/spotifyIdSlice';
 function _Editor() {
     const getAccessToken = async () => {
-        var client_id = 'd8e82e896d3a4adb8e04b3375d9b1f8b'; // Your client id
-        var client_secret = '03e293e2e8fb499ba85812272ab09a86'; // Your secret
-        var authOptions = {
-            // url: 'https://accounts.spotify.com/api/token',
-            headers: { 'Authorization': 'Basic ' + (Buffer.from(client_id + ':' + client_secret).toString('base64')) },
-            form: {
-                grant_type: "client_credentials"
-                // refresh_token: refresh_token
-            },
-            json: true
-        };
-
-        //   if (!error && response.statusCode === 200) {
-        //     var access_token = body.access_token;
-        //     res.send({
-        //       'access_token': access_token
-        //     });
-        //   }
-        // console.log()
-
+        
         const res = await axios.get('http://localhost:8888/refresh_token');
-        // .then(resp => console.log(resp.data))
-        // .then(err => console.error(err));
+       
         console.log(res.data.access_token)
-        // res.data.headers['Content-Type'] ="application/json";
+      
     }
 
-
+const id = useSelector(selectSpotifyID)
+console.log(id)
     const [content, setContent] = useState("");
     const [fileName, setFileName] = useState("");
     const [isLoaded, setIsLoaded] = useState(false);
+   
     const [unsaveChanges, setUnsaveChanges] = useState(false);
     const [noteID, setNoteID] = useState(null);
     const contentRef = useRef(null);
     const fileNameRef = useRef(null);
-
-    // const { uid } = user;
+    const dispatch = useDispatch()
     useEffect(() => {
         const fetchData = async () => {
             const { user } = store.getState().user;
@@ -51,6 +36,7 @@ function _Editor() {
                 uniqueURI: uriInput || new Date().getUTCMilliseconds()
             };
             console.log(spotify.uniqueURI.toString())
+            dispatch(writeID(spotify.uniqueURI.toString()))
             const noteDocRef = await db.collection("users").doc(user.uid).collection("notes").doc(spotify.uniqueURI.toString());
             //   console.log(await noteDocRef
             const doc = await noteDocRef.get()
@@ -72,21 +58,37 @@ function _Editor() {
 
         }
         fetchData()
-    }, [])
+    }, [dispatch])
+   
+//   function(){
 
-    const saveToDb = () => {
-        noteID.update({
+//   }
+
+    function saveToDb() {
+        const { user } = store.getState().user;
+      const {id} = (store.getState().spotifyID)
+      console.warn("id from")
+       const noteDocRef =  db.collection("users").doc(user.uid).collection("notes").doc(id);
+        console.log(content)
+        noteDocRef.update({
             name: fileName,
             content,
             lastModified: new Date()
         });
         setUnsaveChanges(false)
-
-
-
-
-        
+        console.warn("sabed changes from autosave?")       
     }
+   
+
+const callApi = () => saveToDb();
+const [debouncedCallApi] = useState(() => _.debounce(callApi, 1000));
+function handleChanges() { 
+    
+    debouncedCallApi(); 
+  }
+
+
+    
     const onUnload = (event) => {
         event.preventDefault();
         event.returnValue = "You have unsaved changes!";
@@ -124,6 +126,8 @@ function _Editor() {
                 onChange={(getValue) => {
                      setContent(getValue())
                      setUnsaveChanges(true)
+                        handleChanges()
+                        // autoSave()
                     }
                     //  ()=>{console.log("value is changed")}
                 }
@@ -139,7 +143,7 @@ function _Editor() {
             <button onClick={()=>{console.log(unsaveChanges)}}>
                 is it saved?
             </button>
-            <button onClick={() => console.log(content)}>
+            <button onClick={() => console.log(contentRef.current.value.state.doc)}>
                 Get content
             </button>
 
@@ -147,4 +151,4 @@ function _Editor() {
     )
 }
 
-export default _Editor
+export default React.memo(_Editor)

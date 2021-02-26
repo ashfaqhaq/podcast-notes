@@ -1,4 +1,4 @@
-import React, { useEffect,Fragment } from 'react'
+import React, { useEffect,Fragment,Suspense } from 'react'
 import {useDispatch,useSelector} from 'react-redux'
 import { login, logout, selectUser } from './features/userSlice';
 import { auth } from './firebase';
@@ -7,10 +7,10 @@ import Header from './components/Header'
 import Signup from './components/Signup'
 import Login from './components/Login'
 import Sidebar from './components/Sidebar'
-import Routes from './Routing/Routes'
+// import Routes from './Routing/Routes'
 import Dashboard from './pages/Dashboard';
 
-
+const Routes = React.lazy(()=>import("./Routing/Routes"))
 export default function App() {
   // eslint-disable-next-line no-unused-vars
   const user = useSelector(selectUser);
@@ -37,6 +37,8 @@ export default function App() {
 
 
   return (
+    <Suspense fallback={
+    <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fsezeromer.com%2Fen%2Fxamarin-forms-gif-loading-ikonu%2F&psig=AOvVaw0v7CKEG5x_xbrNZ7LKrytZ&ust=1614402236323000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCKD5hZTjhu8CFQAAAAAdAAAAABAD" />}>
     <div>
       <Header />
 
@@ -71,12 +73,12 @@ export default function App() {
       ) : (
        
        <Fragment>
-       <Routes>
-         <Dashboard />
+        <Routes component={Routes} />
+         {/* <Dashboard />
            {/* <Editor /> */}
-         {/* </Dashboard> */}
+         {/* </Dashboard>  */}
 
-       </Routes>
+       {/* </Routes> */}
       
 
          
@@ -92,5 +94,6 @@ export default function App() {
 
     <Footer />
     </div>
+    </Suspense>
   )
 }
