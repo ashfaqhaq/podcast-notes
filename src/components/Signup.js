@@ -1,18 +1,48 @@
 import React, { useState } from 'react';
+import {Redirect,useHistory,withRouter } from "react-router-dom"
 import { useDispatch } from 'react-redux';
 import { login } from '../features/userSlice';
 import { auth, db } from '../firebase';
-
-
+import GithubButton from 'react-github-login-button'
+import GoogleButton from 'react-google-button';
+import firebase from 'firebase/app'
 function Signup() {
-
+  const history = useHistory()
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [profilePic, setProfilePic] = useState('');
   const dispatch = useDispatch();
+  const GoogleSignIn=()=>
+  {var provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider)
+      .then((userAuth) => {
+  
+        dispatch(login({
+          email: userAuth.user.email,
+          uid: userAuth.user.uid,
+          displayName: userAuth.user.displayName,
+          profileUrl: userAuth.user.photoURL,
+        }))
+        history.push('/dashboard')
+      }).catch((error) => {
+        console.log(error)
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        //  var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        //  var credential = error.credential;
+        // ...
+        console.log("error", errorCode)
+        console.log("errorMessage", errorMessage)
+        // console.log("email",email)
+        // console.log("error",error)
+      });}
   const register = (e) => {
+    
     e.preventDefault();
     if (!name) {
       return alert("Please enter a full name");
@@ -45,12 +75,13 @@ function Signup() {
               photoURL: profilePic,
             }))
           })
+          .then(()=>{return (history.push("/dashboard"))})
       }).catch(error => alert(error));
   };
   return (
     <div>
       <form>
-
+{/* 
         <input
           type="text"
           value={name}
@@ -75,11 +106,11 @@ function Signup() {
           onChange={e => setPassword(e.target.value)}
           placeholder="Password"
         />
-        <button type="submit" onClick={register}>Register</button>
-      </form>
-      <div class=" bg-gray-300">
-        <div class="container flex justify-center py-20">
-          <div class="p-8 bg-white rounded-lg max-w-md pb-10">
+        <button type="submit" onClick={register}>Register</button> */}
+      
+      <div class="bg-hero">
+        <div class="container flex justify-center">
+          <div class="p-8 bg-black rounded-lg max-w-md pb-10">
             <div class="flex justify-center mb-4">
                <img src="https://i.imgur.com/f6Tb5U1.png" width="70" alt="random img" /> 
             </div> 
@@ -127,28 +158,27 @@ function Signup() {
           
             
           
-          
-            <button class="uppercase h-12 mt-3 text-white w-full rounded bg-red-800 hover:bg-red-900">
-              <i class="fa fa-google mr-2">
-                </i>Google
-              </button>
+                 
+              
+           
               </div>
               </div>
-
+             
 
            
            
            </div>
-
+           <GoogleButton onClick={()=>GoogleSignIn()}/>
+              <GithubButton />
 
         </div>
     
    
     </div>
    
-    
+    </form>
   
     </div>)
 }
 
-export default Signup
+export default withRouter(Signup)
