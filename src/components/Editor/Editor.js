@@ -3,6 +3,7 @@ import { db } from '../../firebase'
 import store from '../../app/store';
 import Editor from "rich-markdown-editor";
 import axios from 'axios';
+import {selectUser } from '../../features/userSlice'
 import { useDispatch, useSelector } from 'react-redux';
 import { writeID, removeID } from '../../features/spotifyIdSlice';
 import _ from 'lodash';
@@ -18,8 +19,8 @@ function _Editor() {
 
     }
 
-    const id = useSelector(selectSpotifyID)
-    console.log(id)
+    // const id = useSelector(selectSpotifyID)
+  
     const [content, setContent] = useState("");
     const [fileName, setFileName] = useState("");
     const [isLoaded, setIsLoaded] = useState(false);
@@ -28,46 +29,49 @@ function _Editor() {
     const [noteID, setNoteID] = useState(null);
     const contentRef = useRef(null);
     const fileNameRef = useRef(null);
+    const user = useSelector(selectUser)
+
     useEffect(() => {
-        const fetchData = async () => {
-            const { user } = store.getState().user;
-            // const { uid } = user
-            var uriInput = prompt('Please Enter your id')
-            let spotify = {
-                uniqueURI: uriInput || new Date().getUTCMilliseconds()
-            };
-            console.log(spotify.uniqueURI.toString())
+            if(user && user.uid){
+            console.log(user.uid)
+          
            
-            const noteDocRef = await db.collection("users").doc(user.uid).collection("notes").doc(spotify.uniqueURI.toString());
-            //   console.log(await noteDocRef
-            const doc = await noteDocRef.get()
-            if (!doc.exists) {
-                await noteDocRef.set({
-                    name: "SpotifyAudioTitle",
-                    content: "",
-                    createdAt: new Date(),
-                    id: spotify.uniqueURI
-                })
-            } else {
-                console.log('Document data:', doc.data());
-                setContent(doc.data().content)
-                setFileName(doc.data().name)
-                setIsLoaded(true)
+                // var uriInput = prompt('Please Enter your id')
+                let spotify = {
+                    uniqueURI:  new Date().getUTCMilliseconds()
+                };
+                console.log(spotify.uniqueURI.toString())
+              
+                const noteDocRef =  db.collection("users").doc(user.uid).collection("notes").doc(spotify.uniqueURI.toString());
+                //   console.log(await noteDocRef
+                // const doc =  
+                noteDocRef.get()
+                .then(doc=> {
+                    if (!doc.exists) {
+                    noteDocRef.set({
+                       name: "SpotifyAudioTitle",
+                       content: "",
+                       createdAt: new Date(),
+                       id: spotify.uniqueURI
+                   })
+                   setIsLoaded(true)
+               } else {
+                   console.log('Document data:', doc.data());
+                   setContent(doc.data().content)
+                   setFileName(doc.data().name)
+                   setIsLoaded(true)
+               }});
+               setNoteID(noteDocRef)
             }
-            setNoteID(noteDocRef)
-
-
-        }
-        fetchData()
-    }, [])
+            }, [user])
 
   
 
     function saveToDb() {
-        const { user } = store.getState().user;
-        const noteDocRef = db.collection("users").doc(user.uid).collection("notes").doc(id);
+        // const { user } = store.getState().user;
+        // const noteDocRef = db.collection("users").doc(user.uid).collection("notes").doc(noteID);
         console.log(content)
-        noteDocRef.update({
+        noteID.update({
             name: fileName,
             content,
             lastModified: new Date()
