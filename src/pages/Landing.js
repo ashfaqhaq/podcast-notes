@@ -1,6 +1,7 @@
 import React , {useState} from 'react'
 // import svg from '../images/undraw_walk_in_the_city_1ma6 (1).svg'
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
+
 import Signup from '../components/Signup'
 import Modal from 'react-modal';
 import svg from '../images/podcast_audience.jpg'
@@ -32,6 +33,9 @@ function Landing() {
       }
     return (
         <div>
+            <div> 
+              </div>
+            
             <Modal
           isOpen={modalIsOpen}
           onAfterOpen={afterOpenModal}
@@ -41,21 +45,21 @@ function Landing() {
         >
  
           <h2 ref={_subtitle => (subtitle = _subtitle)}>Hello</h2>
-          <button onClick={closeModal}>close</button>
+          <button className="flex flex-row-reverse" onClick={closeModal}>X</button>
         <Signup />
         </Modal>
         <div className="grid grid-cols-1 sm:grid-cols-2 flex items-center gap-4">
             <div className="mx-6">
                
                 <h1 className="mt-15 mb-5 text-green-700">
-                    Don't Just Listen to Podcast.  
+                    Don't Just Listen to a Podcast.  
                     </h1>
                    
                     <p className="">
                         In this on fast pace world, we feel ourselves filled with massive amount of information.
                     </p>
-                    <button  onClick={openModal} className="mt-3 bg-green-900 text-white hover:text-green-900 hover:bg-white  font-bold py-2 px-4 rounded">Join for free</button>
-                    <button className="mt-3 mx-3 bg-yellow-500 text-black hover:text-green-900 hover:bg-white  font-bold py-2 px-4 rounded">Login</button>
+                    <button  onClick={openModal} className="mt-3 bg-green-500 text-white hover:text-green-900 hover:bg-white  font-bold py-2 px-4 rounded">Join for free</button>
+                    <button className="mt-3 mx-3 bg-blue-500 text-white hover:text-green-900 hover:bg-white  font-bold py-2 px-4 rounded">Login</button>
                 </div>    
                 <div className="">
                     <center>
@@ -103,7 +107,7 @@ function Landing() {
       <div className="py-16 max-w-sm rounded overflow-hidden shadow-lg hover:bg-white transition duration-500 bg-white ">
           <div className="space-y-10">
               <i className="fa fa-users" style={{fontSize:'48px'}}></i>
-              
+             
               <div className="px-6 py-4">
                   <div className="space-y-5">
                       <div className="font-bold text-xl mb-2">Community and Rich text</div>
