@@ -6,98 +6,94 @@ import Footer from './components/Footer'
 import Header from './components/Header'
 import Signup from './components/Signup'
 import Login from './components/Login'
-import Sidebar from './components/Sidebar'
+import GoogleSignIn from './components/GoogleSignIn'
 import Landing from './Pages/Landing'
-
-// import Routes from './Routing/Routes'
-import Dashboard from './Pages/Dashboard';
-
+import {  useHistory } from 'react-router-dom';
+import Signout from './components/Signout';
 const Routes = React.lazy(()=>import("./Routing/Routes"))
 export default function App() {
-  // eslint-disable-next-line no-unused-vars
+  const history = useHistory()
+  
+  
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   auth.onAuthStateChanged(userAuth => {
-  //     if (userAuth) {
-  //       // user is logged in
-  //       console.log(userAuth.uid)
-  //       dispatch(login({
-  //         email: userAuth.email,
-  //         uid: userAuth.uid,
-  //         displayName: userAuth.displayName,
-  //         photoUrl: userAuth.photoURL,
-  //       }))
-  //     } else {
-  //       // use is logged out
-  //       dispatch(logout());
-  //     }
-  //   })
-  // }, [dispatch]);
+  useEffect(() => {
+    var counter = 0;
+    console.log("getting renderd",counter++)
+    auth.onAuthStateChanged(userAuth => {
+      if (userAuth) {
+        // user is logged in
+        console.log("user is logged in",userAuth.uid)
+        dispatch(login({
+          email: userAuth.email,
+          uid: userAuth.uid,
+          displayName: userAuth.displayName,
+          photoUrl: userAuth.photoURL,
+        }))
+        // history.push("/dashboard")
+      } else {
+        console.log("user note found macha")
+        dispatch(logout())
+       history.push("/")
+     
+      }
+    })
+  }, [dispatch,history]);
 
 
 
   return (
-    // <Suspense fallback={ }>
+    
    
     <div className="box-border font-montserrat">
+      <Suspense fallback={<h1>Loading</h1>}>
       <Header />
+
+      <Routes component={Routes} >
+        
+          <Landing/>
+          <Signup/>
+          <Login />
+       
+
+
+
+   </Routes>
+
 
      
      
-           {/* <Signup/> */}
-           {/* <Signin /> */}
-           {/* <Home/> */}
+          
+          
            {/* <Userinfo /> */}
            {/* <Layout /> */}
            {/* <SearchBar/> */}
            {/* <Notes /> */}
-             {/* <TakeNotes /> */}
-             {/* <CreateNotes /> */}
-
-
-
-     
-
-      {/* <div className="app">
-      <Header /> */}
+          {/* <TakeNotes /> */}
+          {/* <CreateNotes /> */}
 
       {!user ? (
         <div>
-          <Landing />
-           <Login />
-
-           <Signup/>
-
-
-
+        <Landing />
         </div>
       ) : (
-       
-       <Fragment>
-        <Routes component={Routes} />
-         {/* <Dashboard />
-           {/* <Editor /> */}
-         {/* </Dashboard>  */}
-
-       {/* </Routes> */}
-      
-
-         
+       <Fragment> 
           <h1>Logged in </h1>
           <div className="app_body">
+      
+        
          
-          <button onClick={()=> auth().signOut().then(()=>dispatch(logout()))}>Logout </button>
         </div>
         </Fragment>
       )}
       
-    {/* </div> */}
+  
 
 
     <Footer />
+    </Suspense> 
     </div>
-    /* </Suspense> */
+    
   )
 }
