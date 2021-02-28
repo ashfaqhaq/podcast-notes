@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 
-import Sidebar from '../components/Sidebar'
+import ClippedDrawer from '../components/ClippedDrawer'
 
 import Editor from '../components/Editor/Editor'
 
@@ -9,14 +9,9 @@ function Dashboard() {
     return (
         <Fragment>
             <div className="flex">
-                <div>
-            <Sidebar/>
-            </div>
-            <div className="m-40">
-            <Editor />
-            </div>
-           
-            
+              
+            <ClippedDrawer/>
+               
              </div>
         </Fragment>
     )
