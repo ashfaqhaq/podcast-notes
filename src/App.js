@@ -1,17 +1,25 @@
 import React, { useEffect,Fragment,Suspense } from 'react'
 import {useDispatch,useSelector} from 'react-redux'
-import { login, logout, selectUser } from './features/userSlice';
+import { login, selectUser } from './features/userSlice';
 import { auth } from './firebase';
 import Footer from './components/Footer'
 import Header from './components/Header'
 import Signup from './components/Signup'
-import Login from './components/Login'
 
-import GoogleSignIn from './components/GoogleSignIn'
+import Search from './components/Search'
+
+import ClippedDrawer from './components/ClippedDrawer'
+import Editor from './components/Editor/Editor'
+import SideDrawer from './components/SideDrawer'
+
+import Modal from 'react-modal';
 import Landing from './Pages/Landing'
-import {  useHistory, withRouter,Redirect } from 'react-router-dom';
-import Signout from './components/Signout';
+import {  useHistory, withRouter } from 'react-router-dom';
+
 import Dashboard from './Pages/Dashboard'
+// import SideDrawer from './components/SideDrawer';
+
+
 const Routes = React.lazy(()=>import("./Routing/Routes"))
  function App() {
   const history = useHistory()
@@ -19,29 +27,61 @@ const Routes = React.lazy(()=>import("./Routing/Routes"))
   
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
-
+  const customStyles = {
+    content : {
+      top                   : '50%',
+      left                  : '50%',
+      right                 : 'auto',
+      bottom                : 'auto',
+      marginRight           : '-50%',
+      transform             : 'translate(-50%, -50%)'
+    }
+  };
+  const [modalIsOpen,setIsOpen] = React.useState(false);
+    
+    function openModal() {
+        setIsOpen(true);
+      }
+     
+      // function afterOpenModal() {
+      //   // references are now sync'd and can be accessed.
+      //   subtitle.style.color = '#f00';
+      // }
+      
+      function closeModal(){
+        setIsOpen(false);
+      }
   useEffect(() => {
     var counter = 0;
+   
     console.log("getting renderd",counter++)
     auth.onAuthStateChanged(userAuth => {
       if (userAuth) {
         // user is logged in
         console.log("user is logged in",userAuth.uid)
+        closeModal()
         dispatch(login({
           email: userAuth.email,
           uid: userAuth.uid,
           displayName: userAuth.displayName,
           photoUrl: userAuth.photoURL,
         }))
+
         console.log(history.location.pathname)
         // <Redirect to = {history.location.pathname} />
         history.push(history.location.pathname)
         // history.push("/dashboard")
       } else {
-        console.log("user note found macha")
-        dispatch(logout())
-        
-         history.push("/");
+       console.log("no person allowed")
+     if (history.location.pathname.length>3){
+      openModal()
+     }
+      //  
+
+        // console.log("user note found macha")
+        // dispatch(logout())
+        // history.push('/')
+
      
       }
     })
@@ -56,20 +96,22 @@ const Routes = React.lazy(()=>import("./Routing/Routes"))
     
    
     <div className="box-border font-montserrat">
-      <Suspense fallback={<h1>Loading</h1>}>
-      <Header />
-{/* 
-      <Routes component={Routes} >
-        
-          <Landing/>
-          <Signup/>
-          <Login />
-         <Dashboard />
+      { modalIsOpen?  <Modal
+        isOpen={modalIsOpen}
+        // onAfterOpen={afterOpenModal}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Example Modal"
+      >
+ 
+          {/* <h2 ref={_subtitle => (subtitle = _subtitle)}>Hello</h2> */}
+          <button className="flex flex-row-reverse" >X</button>
+        <Signup />
+        </Modal>:null}
+      <Suspense fallback={<h1 className="mx-10 my-5">Loading</h1>}>
+      {/* <Header /> */}
 
-
-
-   </Routes> */}
-
+     
 
      
      
@@ -84,13 +126,24 @@ const Routes = React.lazy(()=>import("./Routing/Routes"))
 
       {!user ? (
        
-       <Landing />
-        ) : (
-       <Fragment> 
-          <h1>Logged in </h1>
-          <div className="app_body">
+       <Landing /> 
+        ) : ( <Fragment> 
+          
+          <div>
+          
           {/* {<Redirect to="/dashboard" component={Dashboard} />} */}
-          <Dashboard />
+          <Routes component={Routes} >
+        
+         
+         <Dashboard />
+        <SideDrawer />
+         <ClippedDrawer />
+         <Editor/>
+         <Search/>
+        
+
+   </Routes>
+
          
         </div>
         </Fragment>
@@ -99,7 +152,7 @@ const Routes = React.lazy(()=>import("./Routing/Routes"))
   
 
 
-    <Footer />
+    {/* <Footer /> */}
     </Suspense> 
     </div>
     
