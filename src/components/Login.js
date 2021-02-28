@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Redirect} from 'react-router-dom';
+import { Redirect,Route,Switch,useHistory, useLocation,withRouter} from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { login } from '../features/userSlice';
 import { auth } from '../firebase';
@@ -10,9 +10,10 @@ function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     
-    
+    const  history=useHistory()
+    const location = useLocation()
     const dispatch = useDispatch();
-  
+
     const loginToApp = e => {
       e.preventDefault();
       auth.signInWithEmailAndPassword(email, password)
@@ -24,7 +25,18 @@ function Login() {
             profileUrl: userAuth.user.photoURL,
           }))
         })
-        .then(()=>{return (<Redirect to="/dashboard" />)})
+        // .then(()=>{return (<Switch>
+        // <Route to="/dashboard" >
+        //   <Dashboard />
+        // </Route>
+        // <Route to="/dashboard" >
+        //   <Dashboard />
+        // </Route>
+        // <Route to="/dashboard" >
+        //   <Dashboard />
+        // </Route>
+        // </Switch> )})
+       .then(()=>console.log(location)) 
       
         .catch(error => alert(error));
     };
@@ -53,4 +65,4 @@ function Login() {
 
 
 
-export default Login
+export default withRouter(Login)
