@@ -6,12 +6,14 @@ import Footer from './components/Footer'
 import Header from './components/Header'
 import Signup from './components/Signup'
 import Login from './components/Login'
+
 import GoogleSignIn from './components/GoogleSignIn'
 import Landing from './Pages/Landing'
-import {  useHistory } from 'react-router-dom';
+import {  useHistory, withRouter,Redirect } from 'react-router-dom';
 import Signout from './components/Signout';
+import Dashboard from './Pages/Dashboard'
 const Routes = React.lazy(()=>import("./Routing/Routes"))
-export default function App() {
+ function App() {
   const history = useHistory()
   
   
@@ -31,14 +33,21 @@ export default function App() {
           displayName: userAuth.displayName,
           photoUrl: userAuth.photoURL,
         }))
+        console.log(history.location.pathname)
+        // <Redirect to = {history.location.pathname} />
+        history.push(history.location.pathname)
         // history.push("/dashboard")
       } else {
         console.log("user note found macha")
         dispatch(logout())
-       history.push("/")
+        
+         history.push("/");
      
       }
     })
+  
+    
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch,history]);
 
 
@@ -49,17 +58,17 @@ export default function App() {
     <div className="box-border font-montserrat">
       <Suspense fallback={<h1>Loading</h1>}>
       <Header />
-
+{/* 
       <Routes component={Routes} >
         
           <Landing/>
           <Signup/>
           <Login />
-       
+         <Dashboard />
 
 
 
-   </Routes>
+   </Routes> */}
 
 
      
@@ -74,15 +83,14 @@ export default function App() {
           {/* <CreateNotes /> */}
 
       {!user ? (
-        <div>
-        <Landing />
-        </div>
-      ) : (
+       
+       <Landing />
+        ) : (
        <Fragment> 
           <h1>Logged in </h1>
           <div className="app_body">
-      
-        
+          {/* {<Redirect to="/dashboard" component={Dashboard} />} */}
+          <Dashboard />
          
         </div>
         </Fragment>
@@ -97,3 +105,5 @@ export default function App() {
     
   )
 }
+
+export default withRouter(App)
