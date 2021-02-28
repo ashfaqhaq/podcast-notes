@@ -3,24 +3,20 @@ import { db } from '../../firebase'
 import store from '../../app/store';
 import Editor from "rich-markdown-editor";
 import axios from 'axios';
-import {selectUser } from '../../features/userSlice'
+import { selectUser } from '../../features/userSlice'
 import { useDispatch, useSelector } from 'react-redux';
 import { writeID, removeID } from '../../features/spotifyIdSlice';
 import _ from 'lodash';
 import { selectSpotifyID } from '../../features/spotifyIdSlice';
+import queryString from 'query-string'
+import { useLocation } from 'react-router-dom'
 function _Editor() {
-    
-    
-    const getAccessToken = async () => {
-
-        const res = await axios.get('http://localhost:8888/refresh_token');
-
-        console.log(res.data.access_token)
-
-    }
+    const location = useLocation()
+    const  episodeID  = queryString.parse(location.search)
+    console.log("episodeID",episodeID)
 
     // const id = useSelector(selectSpotifyID)
-  
+
     const [content, setContent] = useState("");
     const [fileName, setFileName] = useState("");
     const [isLoaded, setIsLoaded] = useState(false);
@@ -32,40 +28,41 @@ function _Editor() {
     const user = useSelector(selectUser)
 
     useEffect(() => {
-            if(user && user.uid){
+        if (user && user.uid) {
             console.log(user.uid)
-          
-           
-                // var uriInput = prompt('Please Enter your id')
-                let spotify = {
-                    uniqueURI:  new Date().getUTCMilliseconds()
-                };
-                console.log(spotify.uniqueURI.toString())
-              
-                const noteDocRef =  db.collection("users").doc(user.uid).collection("notes").doc(spotify.uniqueURI.toString());
-                //   console.log(await noteDocRef
-                // const doc =  
-                noteDocRef.get()
-                .then(doc=> {
-                    if (!doc.exists) {
-                    noteDocRef.set({
-                       name: "SpotifyAudioTitle",
-                       content: "",
-                       createdAt: new Date(),
-                       id: spotify.uniqueURI
-                   })
-                   setIsLoaded(true)
-               } else {
-                   console.log('Document data:', doc.data());
-                   setContent(doc.data().content)
-                   setFileName(doc.data().name)
-                   setIsLoaded(true)
-               }});
-               setNoteID(noteDocRef)
-            }
-            }, [user])
 
-  
+
+            // var uriInput = prompt('Please Enter your id')
+            // let spotify = {
+            //     uniqueURI: new Date().getUTCMilliseconds()
+            // };
+            // console.log(spotify.uniqueURI.toString())
+
+            const noteDocRef = db.collection("users").doc(user.uid).collection("notes").doc(episodeID.id);
+            //   console.log(await noteDocRef
+            // const doc =  
+            noteDocRef.get()
+                .then(doc => {
+                    if (!doc.exists) {
+                        noteDocRef.set({
+                            name: "SpotifyAudioTitle",
+                            content: "",
+                            createdAt: new Date(),
+                            id: episodeID.id
+                        })
+                        setIsLoaded(true)
+                    } else {
+                        console.log('Document data:', doc.data());
+                        setContent(doc.data().content)
+                        setFileName(doc.data().name)
+                        setIsLoaded(true)
+                    }
+                });
+            setNoteID(noteDocRef)
+        }
+    }, [user,episodeID])
+
+
 
     function saveToDb() {
         // const { user } = store.getState().user;
@@ -98,42 +95,53 @@ function _Editor() {
     });
 
     return (
-        <div>
-
-            <button onClick={getAccessToken}> Get access token </button>
-            <input ref={fileNameRef} value={fileName} onChange={(e) => { setFileName(e.target.value) }} />
-            <button onClick={saveToDb}>
-                Save
+        <div> 
+                <iframe 
+            title="Spotify player"
+      src={`https://open.spotify.com/embed/episode/${episodeID.id}`}
+                 width="1000"
+                 height="300"
+             frameborder="0"
+                allowtransparency="true"
+                 allow="encrypted-media"
+    />
+           
+          
+               Notes Name <br/>
+                <input ref={fileNameRef} value={fileName} onChange={(e) => { setFileName(e.target.value) }} />
+          <br/>
+           <button onClick={saveToDb} >
+            Save
             </button>
-            <h2> Give text input here : </h2>
-            {isLoaded ?
             
+            {
+        isLoaded ?
+                <div className="m-10 px-10 py-5 border min-h-full">
             <Editor
                 defaultValue={content}
                 ref={contentRef}
                 onChange={(getValue) => {
                     setContent(getValue())
                     setUnsaveChanges(true)
-                  }
-                   
                 }
 
-         
+                }
+
+
             // onShowToast={(message) => toast(message)}
-            /> : <h2>Loading....</h2>}
+            /> </div>: <h2>Loading....</h2>
+    }
 
 
-            <button onClick={() => console.log(store.getState())}>
-                Get store value
-            </button>
+{/*            
             <button onClick={() => { console.log(unsaveChanges) }}>
-                is it saved?
+            is it saved?
             </button>
             <button onClick={() => console.log(content)}>
-                Get content
-            </button>
+            Get content
+            </button> */}
 
-        </div>
+        </div >
     )
 }
 
