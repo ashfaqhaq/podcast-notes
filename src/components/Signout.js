@@ -17,13 +17,9 @@ function Signout() {
     return(
         <div>
           
-    {auth.signOut().then(() => {
-        console.log("logged out")
-        dispatch(logout())
-        
-        
-     })
-     .then(()=> { <Redirect to="/"/>})
+    {auth.signOut()
+   
+    //  .then(()=> { <Redirect to="/"/>})
      .catch((error) => {
        // An error happened.
        console.log(error,"error")
