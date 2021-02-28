@@ -1,11 +1,13 @@
-import React , {useState} from 'react'
+import React from 'react'
 // import svg from '../images/undraw_walk_in_the_city_1ma6 (1).svg'
 // import ReactDOM from 'react-dom';
-
+import {useSpring, animated} from 'react-spring'
 import Signup from '../components/Signup'
 import Modal from 'react-modal';
 import svg from '../images/podcast_audience.jpg'
 function Landing() {
+    const props = useSpring({opacity: 1, from: {opacity: 0}})
+    const [newUser,setNewUser] = React.useState(true)
     const customStyles = {
         content : {
           top                   : '50%',
@@ -16,37 +18,37 @@ function Landing() {
           transform             : 'translate(-50%, -50%)'
         }
       };
-    var subtitle;
+   
     const [modalIsOpen,setIsOpen] = React.useState(false);
     
-    function openModal() {
+    function handleSignUp() {
+        setNewUser(true)
+        setIsOpen(true);
+      }
+      function handleLogin() {
+         setNewUser(false) 
         setIsOpen(true);
       }
      
-      function afterOpenModal() {
-        // references are now sync'd and can be accessed.
-        subtitle.style.color = '#f00';
-      }
-     
+      
       function closeModal(){
         setIsOpen(false);
       }
     return (
-        <div>
+        <animated.div style={props}>
             <div> 
               </div>
             
             <Modal
           isOpen={modalIsOpen}
-          onAfterOpen={afterOpenModal}
           onRequestClose={closeModal}
           style={customStyles}
           contentLabel="Example Modal"
         >
  
-          <h2 ref={_subtitle => (subtitle = _subtitle)}>Hello</h2>
+         
           <button className="flex flex-row-reverse" onClick={closeModal}>X</button>
-        <Signup />
+        <Signup newUser={newUser}/>
         </Modal>
         <div className="grid grid-cols-1 sm:grid-cols-2 flex items-center gap-4">
             <div className="mx-6">
@@ -58,8 +60,8 @@ function Landing() {
                     <p className="">
                         In this on fast pace world, we feel ourselves filled with massive amount of information.
                     </p>
-                    <button  onClick={openModal} className="mt-3 bg-green-500 text-white hover:text-green-900 hover:bg-white  font-bold py-2 px-4 rounded">Join for free</button>
-                    <button className="mt-3 mx-3 bg-blue-500 text-white hover:text-green-900 hover:bg-white  font-bold py-2 px-4 rounded">Login</button>
+                    <button  onClick={handleSignUp} className="mt-3 bg-green-500 text-white  hover:bg-green-900  font-bold py-2 px-4 rounded">Join for free</button>
+                    <button  onClick={handleLogin} className="mt-3 mx-3 bg-blue-500 text-white hover:bg-blue-700  font-bold py-2 px-4 rounded  hover:transform scale-90">Login</button>
                 </div>    
                 <div className="">
                     <center>
@@ -127,7 +129,7 @@ function Landing() {
 
            
 
-        </div>
+              </animated.div>
     )
 }
 
