@@ -12,12 +12,14 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 function _Editor() {
     // const  episodeID  = queryString.parse(location.search)
- 
-
+    const [w, setW] = useState()
+    useEffect(() => {
+       setW(window.innerWidth)
+    }, [])
     // const id = useSelector(selectSpotifyID)
     
     let { episodeID } = useParams()
-    console.log("episodeID",episodeID)
+   
     const [content, setContent] = useState("");
     const [fileName, setFileName] = useState("");
     const [isLoaded, setIsLoaded] = useState(false);
@@ -44,7 +46,7 @@ function _Editor() {
                         })
                         setIsLoaded(true)
                     } else {
-                        console.log('Document data:', doc.data());
+                       
                         setContent(doc.data().content)
                         setFileName(doc.data().name)
                         setIsLoaded(true)
@@ -85,12 +87,13 @@ function _Editor() {
 
     return (
         <div> 
+             
             <div className="player">
              <iframe 
             title="Spotify player"
             key="iframe"
       src={`https://open.spotify.com/embed/episode/${episodeID}`}
-                 width="1000"
+                 width= {w<768?"380":"900"}
                  height="300"
              frameborder="0"
                 allowtransparency="true"
@@ -101,16 +104,16 @@ function _Editor() {
           
                File Title: 
             <br/>
-            <div className="">
-             <input placeholder="File Title...." className="px-10 m-2 border text-2xl focus:bg-green-100"ref={fileNameRef} value={fileName} onChange={(e) => { setFileName(e.target.value) }} /> 
-              <button onClick={saveToDb} className="float-right bg-green-500 text-white font-semibold  hover:bg-green-700 m-3 p-2 rounded"  >
-            Save Changes
+            <div className="flex">
+             <input placeholder="File Title...." className="px-5 border text-1xl focus:bg-green-100"ref={fileNameRef} value={fileName} onChange={(e) => { setFileName(e.target.value) }} /> 
+              <button onClick={saveToDb} className="flex flex-row-reverse my-2 bg-green-500 text-white font-semibold  hover:bg-green-700 m-3 p-2 rounded"  >
+            Save
             </button>
             </div>
           
             {
         isLoaded ?
-                <div className="m-2 px-10 py-5 border min-h-full">
+                <div className="mt-5 px-10 py-5 border min-h-full">
             <Editor
                 defaultValue={content}
                 ref={contentRef}
@@ -128,13 +131,7 @@ function _Editor() {
 
           
 
-{/*            
-            <button onClick={() => { console.log(unsaveChanges) }}>
-            is it saved?
-            </button>
-            <button onClick={() => console.log(content)}>
-            Get content
-            </button> */}
+
 <ToastContainer />
         </div >
     )

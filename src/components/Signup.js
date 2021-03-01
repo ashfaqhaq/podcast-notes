@@ -58,7 +58,7 @@ console.log(newUser)
     
       
       <div class="bg-hero">
-        <div class="container grid sm:grid-cols-2 grid-cols-1 justify-center ">
+        <div class="container grid md:grid-cols-2 grid-cols-1 justify-center ">
          
         {signup?
         <div>
@@ -70,24 +70,24 @@ console.log(newUser)
            <center>
            <div className="container p-8 middle bg-black rounded-lg max-w-md">
                       Authenticate with 
-          <div className="h-12 mt-3 rounded w-full  px-3 ">
+          <div className="md:h-12 h-6 mt-3 rounded w-full  px-3 ">
            <GoogleButton onClick={()=>GoogleSignIn()}/>
            </div>
-           <Divider />
+           
            {/* <div className="h-12 mt-3 rounded w-full  px-3">
               <GithubButton />
               </div> */}
               </div>
               <div class="p-0 text-gray-400 mb-1">
              {signup? 
-             <div> Already a member? <div onClick={()=>setSignup(false)}>
+             <div> Already a member? <div onClick={(e)=>{e.preventDefault();setSignup(false)}}>
                <button className="bg-blue-500 hover:bg-blue-700 my-2 px-4 py-2 font-semibold text-white rounded">
                Login</button></div>
              </div> 
              :
-             <div class="p-0 text-gray-400 font-2xl mb-1"> 
+             <div class="p-0 text-gray-400 font-2xl mb-6"> 
              New user?
-              <div onClick={()=>setSignup(true)}><button className="bg-green-500  my-2 px-4 py-2 font-semibold hover:bg-green-700 m-2 p-2 text-white rounded">Signup</button></div></div>
+              <div onClick={(e)=>{e.preventDefault();setSignup(true)}}><button className="bg-green-500   px-4 py-2 font-semibold hover:bg-green-700 m-2 p-2 text-white rounded">Signup</button></div></div>
              }
              </div>
               </center>

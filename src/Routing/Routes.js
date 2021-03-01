@@ -3,16 +3,16 @@ import { Switch } from 'react-router-dom';
 import { Route, BrowserRouter as Router } from 'react-router-dom'
 
 import Signup from '../components/Signup';
-
+import PageNotFound from '../Pages/PageNotFound'
 import { selectUser } from '../features/userSlice';
 import Dashboard from '../Pages/Dashboard';
 import Landing from '../Pages/Landing';
 
 import { useSelector } from 'react-redux';
-import { console } from 'window-or-global';
+
 function Routes() {
     const user = useSelector(selectUser)
-    console.log(user)
+    
     return (
         <div>
             <Router>
@@ -26,6 +26,7 @@ function Routes() {
                  </Route>  
                   {/* <Route exact path="/dashboard" component={Dashboard} /> */}
                   <Route exact path="/signup" component= {Signup}/>
+                  {/* <Route  path="/signup" component= {Signup}/> */}
                   {/* <Route exact path="/signout" component= {Signout}/> */}
                     
                  
@@ -47,6 +48,9 @@ function Routes() {
           </Route>
           <Route path="/episodes">
           <Dashboard />
+          </Route>
+          <Route path="*">
+            <PageNotFound/>
           </Route>
                   </Switch>
             </Router>

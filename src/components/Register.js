@@ -9,7 +9,7 @@ function Register() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
-    const [profilePic, setProfilePic] = useState('');
+   
     const dispatch = useDispatch()
     const history = useHistory()
 
@@ -23,8 +23,7 @@ function Register() {
         auth.createUserWithEmailAndPassword(email, password)
           .then(userAuth => {
             userAuth.user.updateProfile({
-              displayName: name,
-              photoURL: profilePic,
+              displayName: name            
             })
               .then(async () => {
     
@@ -34,7 +33,7 @@ function Register() {
                     email: userAuth.user.email,
                     uid: userAuth.user.uid,
                     displayName: name,
-                    photoURL: profilePic,
+                  photoURL: '',
                   }
                 });
     
@@ -44,14 +43,14 @@ function Register() {
                   email: userAuth.user.email,
                   uid: userAuth.user.uid,
                   displayName: name,
-                  photoURL: profilePic,
+                  photoURL: '',
                 }))
               })
               .then(()=>{return (history.push("/dashboard"))})
           }).catch(error => alert(error));
       };
     return (
-        <div class="p-8 bg-black rounded-lg max-w-md pb-10">
+        <div class="p-8 bg-black   rounded-lg max-w-md pb-10">
         <div class="flex justify-center mb-4">
            <img src={Logo} alt="random img" /> 
         </div> 
@@ -64,7 +63,7 @@ function Register() {
         class="h-12 rounded w-full border px-3 focus:text-black focus:border-blue-100"
         
         placeholder="Name" /> 
-         <input
+         {/* <input
       type="text"
       value={profilePic}
       onChange={e => setProfilePic(e.target.value)}
@@ -72,7 +71,7 @@ function Register() {
         
         class="h-12 mt-3 rounded w-full border px-3 focus:text-black focus:border-blue-100"
         
-       />
+       /> */}
         <input
       type="email"
       value={email}

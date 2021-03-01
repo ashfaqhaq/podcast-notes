@@ -16,32 +16,32 @@ function EpisodeList() {
         
         .catch((err)=>{setError(err)})
     }, [])
-    const location = useLocation()
-    console.log(location)
     return (
-        <div>
+        <div  className="max-w-screen">
             {/* {error?<p>An error Occured: Try refreshing the page. If the issue still persist. Try to logout and login again {error} </p>: null} */}
-            <div className="p-10">
+            <div className="mt-5 px-4">
     {episodes?.map(items=>{
         return( 
-        <div className=" w-full lg:max-w-full lg:flex my-2">
+        <div className="border-r border-b border-l border-gray-400 md:my-2 md:border-gray-200 lg:border-l-0 lg:border-t  w-full lg:max-w-full lg:flex my-2">
+        {/* <div className="border-r border-b border-l border-gray-400 "> */}
         <img src={items.images[0]?.url} className="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"  alt="episode" />
         
-        <div className="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+        <div className=" lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+        {/* <div className=" lg:border-gray-100 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal"> */}
           <div className="mb-8">
             
             <div className="text-gray-900 font-bold text-xl mb-2">{items.name}</div>
             <p className="text-gray-700 text-base">{items.description}</p>
           </div>
-          <div className="flex items-center">
+          <div className="flex">
             
-            <div className="text-sm">
+            <div className="flex justify-between">
              
-              <p className="text-red-500">Release Date: {items.release_date}</p>
+              <p className="text-medium text-red-500 px-5 py-2 m-5">Release Date: {items.release_date}</p>
               <Link to={{
         pathname: "/editor/"+items.id
       }}>
-              <button className="rounded bg-green-500 px-5 mx-5 text-bold text-white "> Play </button>
+              <button className="rounded-full  float-right bg-green-500 px-5 py-2 m-5 text-bold text-white hover:bg-green-900 "><i className="fa fa-play"> Play </i></button>
                 </Link>
             </div>
           </div>

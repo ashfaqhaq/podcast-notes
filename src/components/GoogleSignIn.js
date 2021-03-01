@@ -7,9 +7,9 @@ function GoogleSignIn() {
  
   const history = useHistory()
    const dispatch = useDispatch() 
-   console.log("erere")
+   
    useEffect(() => {
-     console.log("erere")
+    
     
  
   }, [dispatch,history])

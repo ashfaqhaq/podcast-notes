@@ -16,7 +16,7 @@ function Signout() {
      .then(()=> { history.push("/")})
      .catch((error) => {
        // An error happened.
-       console.log(error,"error")
+      
      })
      // [END auth_sign_out]
    }

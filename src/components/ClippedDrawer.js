@@ -5,6 +5,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import DescriptionIcon from '@material-ui/icons/Description';
 import List from '@material-ui/core/List';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
@@ -16,8 +17,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import SearchIcon from '@material-ui/icons/Search';
-import NotesIcon from '@material-ui/icons/Notes';
-import { Switch,Route,Link } from 'react-router-dom'
+
+import { Switch,Route,useHistory } from 'react-router-dom'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Editor from '../components/Editor/Editor'
 import Notes from '../components/Notes'
@@ -25,10 +26,11 @@ import Search from '../components/Search'
 // import InboxIcon from '@material-ui/icons/InboxIcon';
 import EpisodeList from './EpisodeList';
 import Signout from './Signout';
+
+import { selectUser } from '../features/userSlice';
+import { useSelector } from 'react-redux';
+import Avatar from '@material-ui/core/Avatar';
 const drawerWidth = 240;
-
-
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -95,11 +97,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ClippedDrawer() {
+  const user = useSelector(selectUser)
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const theme = useTheme();
   const [logout, setLogout] = React.useState(false);
-
+const history = useHistory()
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -131,8 +134,8 @@ export default function ClippedDrawer() {
           >
             <MenuIcon />
           </IconButton>
-            <div className="text-3xl font-semibold text-green-900">
-           PodcastKeep
+            <div className="flex text-3xl font-semibold text-green-900  min-w-full md:min-w-0 sm:min-w-0">
+          PODCASTKEEP
            </div>
         </Toolbar>
       </AppBar>
@@ -155,18 +158,27 @@ export default function ClippedDrawer() {
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </div>
+        
         <List>
-          {['Search'].map((text, index) => (<Link to={"/"+text}>
-          <ListItem button key={text}>
-                 
-              <ListItemIcon>{index % 2 === 0 ? <SearchIcon /> : <NotesIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-               
+        
+        <ListItem button key={user}>
+        <ListItemIcon>  <Avatar src={user.photoUrl} >
+        {user.displayName[0]}
+        </Avatar>
+        </ListItemIcon>
+              <ListItemText primary={"  "+user.displayName} />
+         </ListItem>
+         </List>
+         <List>
+          {['Search','Notes'].map((text, index) => (
+          <ListItem  button  onClick={()=>history.push('/'+text)} key={text}>
+              <ListItemIcon>{index % 2 === 0 ? <SearchIcon /> : <DescriptionIcon /> }</ListItemIcon>
+              <ListItemText  primary={text} />
             </ListItem>
-            </Link>
-          
-          ))}
-<ListItem button key={Signout} onClick={()=>{setLogout(true)}}>
+           ))}
+          </List>
+          <List>
+            <ListItem button key={Signout} onClick={()=>{setLogout(true)}}>
               <ListItemIcon> <ExitToAppIcon/>  </ListItemIcon>
               <ListItemText primary="Logout" />
             </ListItem>
@@ -174,21 +186,14 @@ export default function ClippedDrawer() {
           
         </List>
         <Divider />
-        {/* <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts','Inbox', 'Starred', 'Send email', 'Drafts','Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text} onClick={()=>{console.log(text)}}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List> */}
+        
         <Divider />
        
       </Drawer>
 
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-       
+      <div className={classes.content}>
+        <div className={classes.toolbar}/>
+       <div className="max-w-screen">
         <Switch>
           <Route exact path ="/">
           <Search />
@@ -206,7 +211,8 @@ export default function ClippedDrawer() {
             <EpisodeList />
           </Route>
         </Switch>
-      </main> 
+      </div> 
+      </div> 
     </div>
   );
 }
