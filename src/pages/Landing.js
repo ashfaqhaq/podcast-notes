@@ -5,7 +5,9 @@ import {useSpring, animated} from 'react-spring'
 import Signup from '../components/Signup'
 import Modal from 'react-modal';
 import svg from '../images/podcast_audience.jpg'
+import logo from '../images/logo_size.jpg'
 function Landing() {
+    
     const props = useSpring({opacity: 1, from: {opacity: 0}})
     const [newUser,setNewUser] = React.useState(true)
     const customStyles = {
@@ -36,7 +38,9 @@ function Landing() {
       }
     return (
         <animated.div style={props}>
-            <div> 
+            <div className="mt-4"> 
+                <img src={logo} alt="logo"/>
+                <span className="mx-5 font-semibold">Your notebook for podcasts</span>
               </div>
             
             <Modal
@@ -47,7 +51,7 @@ function Landing() {
         >
  
          
-          <button className="flex flex-row-reverse" onClick={closeModal}>X</button>
+          <button className="bg-red-400 p-2 px-4 m-2 float-right rounded  text-white hover:bg-red-700 flex flex-row-reverse" onClick={closeModal}> Close X</button>
         <Signup newUser={newUser}/>
         </Modal>
         <div className="grid grid-cols-1 sm:grid-cols-2 flex items-center gap-4">
@@ -58,7 +62,9 @@ function Landing() {
                     </h1>
                    
                     <p className="">
-                        In this on fast pace world, we feel ourselves filled with massive amount of information.
+                        Retaining information has become more difficult than before. Due to which long format content such as Podcast barely get any attention, in spite of the fact that podcasts provide a plethora of knowledge to it's audience.
+                        <br/>
+                        <strong>PodcastKeep provides an interactive interface to write down your notes while listening to your favourite podcast. </strong>
                     </p>
                     <button  onClick={handleSignUp} className="mt-3 bg-green-500 text-white  hover:bg-green-900  font-bold py-2 px-4 rounded">Join for free</button>
                     <button  onClick={handleLogin} className="mt-3 mx-3 bg-blue-500 text-white hover:bg-blue-700  font-bold py-2 px-4 rounded  hover:transform scale-90">Login</button>
@@ -95,9 +101,9 @@ function Landing() {
             <i className="fa fa-cloud-upload"  style={{fontSize:'48px'}}></i>
               <div className="px-6 py-4">
                   <div className="space-y-5 hover:text-black-500">
-                      <div className="font-bold text-xl mb-2">Auto Save</div>
+                      <div className="font-bold text-xl mb-2">Cloud Storage</div>
                       <p className="text-base">
-                            All the notes are saved on the cloud
+                            Access your data from anywhere, anytime.
                       </p>
                   </div>
               </div>
@@ -108,13 +114,13 @@ function Landing() {
   <div className="p-2 sm:p-10 text-center cursor-pointer translate-x-2">
       <div className="py-16 max-w-sm rounded overflow-hidden shadow-lg hover:bg-white transition duration-500 bg-white ">
           <div className="space-y-10">
-              <i className="fa fa-users" style={{fontSize:'48px'}}></i>
+              <i className="fa fa-indent" style={{fontSize:'48px'}}></i>
              
               <div className="px-6 py-4">
                   <div className="space-y-5">
-                      <div className="font-bold text-xl mb-2">Community and Rich text</div>
+                      <div className="font-bold text-xl mb-2">Rich Text and Markdown Support</div>
                       <p className="text-gray-700 text-base">
-                         Be a part of the growing Community
+                         Editing and formatting is simple as the editor follows markdown rules
                       </p>
                   </div>
               </div>

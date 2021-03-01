@@ -1,18 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { db } from '../../firebase'
-import store from '../../app/store';
 import Editor from "rich-markdown-editor";
-import axios from 'axios';
 import { selectUser } from '../../features/userSlice'
-import { useDispatch, useSelector } from 'react-redux';
-import { writeID, removeID } from '../../features/spotifyIdSlice';
+import { useSelector } from 'react-redux';
+// eslint-disable-next-line no-unused-vars
 import _ from 'lodash';
-import { selectSpotifyID } from '../../features/spotifyIdSlice';
-import queryString from 'query-string'
-import { useLocation, useParams } from 'react-router-dom'
-import FlipMove from 'react-flip-move'
+import { useParams } from 'react-router-dom'
+import { ToastContainer, toast } from "react-toastify";
+
+
+import "react-toastify/dist/ReactToastify.min.css";
 function _Editor() {
-    const location = useLocation()
     // const  episodeID  = queryString.parse(location.search)
  
 
@@ -23,8 +21,7 @@ function _Editor() {
     const [content, setContent] = useState("");
     const [fileName, setFileName] = useState("");
     const [isLoaded, setIsLoaded] = useState(false);
-    const [h, setH] = useState(300)
-    const [w, setW] = useState(1000)
+    
     const [unsaveChanges, setUnsaveChanges] = useState(false);
     const [noteID, setNoteID] = useState(null);
     const contentRef = useRef(null);
@@ -33,23 +30,14 @@ function _Editor() {
 
     useEffect(() => {
         if (user && user.uid && episodeID) {
-            console.log("useEffect render",user.uid)
-
-
-            // var uriInput = prompt('Please Enter your id')
-            // let spotify = {
-            //     uniqueURI: new Date().getUTCMilliseconds()
-            // };
-            // console.log(spotify.uniqueURI.toString())
-
+           
             const noteDocRef = db.collection("users").doc(user.uid).collection("notes").doc(episodeID);
-            //   console.log(await noteDocRef
-            // const doc =  
+            
             noteDocRef.get()
                 .then(doc => {
                     if (!doc.exists) {
                         noteDocRef.set({
-                            name: "Placeholder text",
+                            name: "",
                             content: "",
                             createdAt: new Date(),
                             id: episodeID
@@ -64,6 +52,7 @@ function _Editor() {
                 });
             setNoteID(noteDocRef)
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user])
 
 
@@ -71,18 +60,14 @@ function _Editor() {
     function saveToDb() {
         // const { user } = store.getState().user;
         // const noteDocRef = db.collection("users").doc(user.uid).collection("notes").doc(noteID);
-        console.log(content)
         noteID.update({
             name: fileName,
             content,
             lastModified: new Date()
         });
+        toast.success("🎉 Your changes have been saved!");
         setUnsaveChanges(false)
     }
-
-
-
-
     const onUnload = (event) => {
         event.preventDefault();
         event.returnValue = "You have unsaved changes!";
@@ -105,26 +90,27 @@ function _Editor() {
             title="Spotify player"
             key="iframe"
       src={`https://open.spotify.com/embed/episode/${episodeID}`}
-                 width={w}
-                 height={h}
-             frameborder="16"
+                 width="1000"
+                 height="300"
+             frameborder="0"
                 allowtransparency="true"
                  allow="encrypted-media"
     />
     </div>
            
           
-               Notes Name <br/>
-                <input ref={fileNameRef} value={fileName} onChange={(e) => { setFileName(e.target.value) }} />
-          <br/>
-           <button onClick={saveToDb} className="bg-green-500 text-white transition hover:scale-110 mx-3 p-3 rounded"  >
-            Save
+               File Title: 
+            <br/>
+            <div className="">
+             <input placeholder="File Title...." className="px-10 m-2 border text-2xl focus:bg-green-100"ref={fileNameRef} value={fileName} onChange={(e) => { setFileName(e.target.value) }} /> 
+              <button onClick={saveToDb} className="float-right bg-green-500 text-white font-semibold  hover:bg-green-700 m-3 p-2 rounded"  >
+            Save Changes
             </button>
-            <input className="border bg-red" onChange={(e)=>setH(e.target.value)} />
-            <input  className="border bg-red" onChange={(e)=>setW(e.target.value)} />
+            </div>
+          
             {
         isLoaded ?
-                <div className="m-10 px-10 py-5 border min-h-full">
+                <div className="m-2 px-10 py-5 border min-h-full">
             <Editor
                 defaultValue={content}
                 ref={contentRef}
@@ -136,10 +122,11 @@ function _Editor() {
                 }
 
 
-            // onShowToast={(message) => toast(message)}
+            onShowToast={(message) => toast(message)}
             /> </div>: <h2>Loading....</h2>
     }
 
+          
 
 {/*            
             <button onClick={() => { console.log(unsaveChanges) }}>
@@ -148,7 +135,7 @@ function _Editor() {
             <button onClick={() => console.log(content)}>
             Get content
             </button> */}
-
+<ToastContainer />
         </div >
     )
 }

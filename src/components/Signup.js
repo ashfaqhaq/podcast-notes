@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import {Redirect,useHistory,withRouter } from "react-router-dom"
+import {withRouter } from "react-router-dom"
 import { useDispatch } from 'react-redux';
 import { login } from '../features/userSlice';
-import { auth, db } from '../firebase';
+import { auth } from '../firebase';
+// eslint-disable-next-line no-unused-vars
 import GithubButton from 'react-github-login-button'
 import GoogleButton from 'react-google-button';
 import firebase from 'firebase/app'
@@ -64,18 +65,20 @@ console.log(newUser)
            <GoogleButton onClick={()=>GoogleSignIn()}/>
            </div>
            <Divider />
-           <div className="h-12 mt-3 rounded w-full  px-3">
+           {/* <div className="h-12 mt-3 rounded w-full  px-3">
               <GithubButton />
-              </div>
+              </div> */}
               </div>
               <div class="p-0 text-gray-400 mb-1">
              {signup? 
-             <div> Already a member? <div onClick={()=>setSignup(false)}>Login</div>
+             <div> Already a member? <div onClick={()=>setSignup(false)}>
+               <button className="bg-blue-500 hover:bg-blue-700 my-2 px-4 py-2 font-semibold text-white rounded">
+               Login</button></div>
              </div> 
              :
              <div class="p-0 text-gray-400 font-2xl mb-1"> 
              New user?
-              <div onClick={()=>setSignup(true)}>Signup</div></div>
+              <div onClick={()=>setSignup(true)}><button className="bg-green-500  my-2 px-4 py-2 font-semibold hover:bg-green-700 m-2 p-2 text-white rounded">Signup</button></div></div>
              }
              </div>
               </center>

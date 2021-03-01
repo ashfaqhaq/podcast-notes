@@ -1,13 +1,8 @@
 import React, { useState } from 'react';
-import {Redirect,useHistory,withRouter } from "react-router-dom"
+import {useHistory } from "react-router-dom"
 import { useDispatch } from 'react-redux';
 import { login } from '../features/userSlice';
 import { auth, db } from '../firebase';
-import GithubButton from 'react-github-login-button'
-import GoogleButton from 'react-google-button';
-import firebase from 'firebase/app'
-import Login from './Login'
-import { Divider } from '@material-ui/core';
 import Logo from '../images/logo_size.jpg'
 
 function Register() {

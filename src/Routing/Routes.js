@@ -1,17 +1,13 @@
 import React from 'react'
-import { Switch,Redirect } from 'react-router-dom';
-import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
-import GoogleSignIn from '../components/GoogleSignIn';
-import Signout from '../components/Signout';
+import { Switch } from 'react-router-dom';
+import { Route, BrowserRouter as Router } from 'react-router-dom'
+
 import Signup from '../components/Signup';
-import Notes from '../components/Notes';
-import Editor from '../components/Editor/Editor';
-import Search from '../components/Search';
-import EpisodeList from '../components/EpisodeList';
+
 import { selectUser } from '../features/userSlice';
 import Dashboard from '../Pages/Dashboard';
 import Landing from '../Pages/Landing';
-import App from '../App.js'
+
 import { useSelector } from 'react-redux';
 import { console } from 'window-or-global';
 function Routes() {
@@ -37,12 +33,14 @@ function Routes() {
                   {/* <Redirect path="/home" component={Landing}/> */}
             {/* <Route exact path="/Gsignin" component= {GoogleSignIn} /> */}
             
-            <Route path="/notes">
-            <Notes />
-          </Route>
+           
           <Route path="/search">
             <Dashboard />
-            {/* <Search /> */}
+           
+          </Route>
+          <Route path="/notes">
+            <Dashboard />
+           
           </Route>
           <Route path="/editor/:episodeID" >
           <Dashboard />

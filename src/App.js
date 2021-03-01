@@ -2,22 +2,13 @@ import React, { useEffect,Fragment,Suspense } from 'react'
 import {useDispatch,useSelector} from 'react-redux'
 import { login, selectUser } from './features/userSlice';
 import { auth } from './firebase';
-import Footer from './components/Footer'
-import Header from './components/Header'
 import Signup from './components/Signup'
-
-import Search from './components/Search'
-
-import ClippedDrawer from './components/ClippedDrawer'
-import Editor from './components/Editor/Editor'
-import SideDrawer from './components/SideDrawer'
-
 import Modal from 'react-modal';
 import Landing from './Pages/Landing'
 import {  useHistory, withRouter } from 'react-router-dom';
 
 import Dashboard from './Pages/Dashboard'
-// import SideDrawer from './components/SideDrawer';
+
 
 
 const Routes = React.lazy(()=>import("./Routing/Routes"))
@@ -52,9 +43,8 @@ const Routes = React.lazy(()=>import("./Routing/Routes"))
         setIsOpen(false);
       }
   useEffect(() => {
-    var counter = 0;
+ 
    
-    console.log("getting renderd",counter++)
     auth.onAuthStateChanged(userAuth => {
       if (userAuth) {
         // user is logged in
@@ -136,10 +126,12 @@ const Routes = React.lazy(()=>import("./Routing/Routes"))
         
          
          <Dashboard />
-        <SideDrawer />
+        {/* <SideDrawer />
          <ClippedDrawer />
-         <Editor/>
-         <Search/>
+         <Editor/> */}
+         {/* <Search/> */}
+          {/* <Notes/> */}
+
         
 
    </Routes>
