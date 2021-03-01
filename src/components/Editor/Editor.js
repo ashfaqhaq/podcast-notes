@@ -1,150 +1,143 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { db } from '../../firebase'
-import store from '../../app/store';
 import Editor from "rich-markdown-editor";
-import axios from 'axios';
+import { selectUser } from '../../features/userSlice'
+import { useSelector } from 'react-redux';
+// eslint-disable-next-line no-unused-vars
+import _ from 'lodash';
+import { useParams } from 'react-router-dom'
+import { ToastContainer, toast } from "react-toastify";
+
+
+import "react-toastify/dist/ReactToastify.min.css";
 function _Editor() {
-    const getAccessToken = async () => {
-        var client_id = 'd8e82e896d3a4adb8e04b3375d9b1f8b'; // Your client id
-        var client_secret = '03e293e2e8fb499ba85812272ab09a86'; // Your secret
-        var authOptions = {
-            // url: 'https://accounts.spotify.com/api/token',
-            headers: { 'Authorization': 'Basic ' + (Buffer.from(client_id + ':' + client_secret).toString('base64')) },
-            form: {
-                grant_type: "client_credentials"
-                // refresh_token: refresh_token
-            },
-            json: true
-        };
+    // const  episodeID  = queryString.parse(location.search)
+ 
 
-        //   if (!error && response.statusCode === 200) {
-        //     var access_token = body.access_token;
-        //     res.send({
-        //       'access_token': access_token
-        //     });
-        //   }
-        // console.log()
-
-        const res = await axios.get('http://localhost:8888/refresh_token');
-        // .then(resp => console.log(resp.data))
-        // .then(err => console.error(err));
-        console.log(res.data.access_token)
-        // res.data.headers['Content-Type'] ="application/json";
-    }
-
-
+    // const id = useSelector(selectSpotifyID)
+    
+    let { episodeID } = useParams()
+    console.log("episodeID",episodeID)
     const [content, setContent] = useState("");
     const [fileName, setFileName] = useState("");
     const [isLoaded, setIsLoaded] = useState(false);
+    
     const [unsaveChanges, setUnsaveChanges] = useState(false);
     const [noteID, setNoteID] = useState(null);
     const contentRef = useRef(null);
     const fileNameRef = useRef(null);
+    const user = useSelector(selectUser)
 
-    // const { uid } = user;
     useEffect(() => {
-        const fetchData = async () => {
-            const { user } = store.getState().user;
-            // const { uid } = user
-            var uriInput = prompt('Please Enter your id')
-            let spotify = {
-                uniqueURI: uriInput || new Date().getUTCMilliseconds()
-            };
-            console.log(spotify.uniqueURI.toString())
-            const noteDocRef = await db.collection("users").doc(user.uid).collection("notes").doc(spotify.uniqueURI.toString());
-            //   console.log(await noteDocRef
-            const doc = await noteDocRef.get()
-            if (!doc.exists) {
-                await noteDocRef.set({
-                    name: "SpotifyAudioTitle",
-                    content: "",
-                    createdAt: new Date(),
-                    id: spotify.uniqueURI
-                })
-            } else {
-                console.log('Document data:', doc.data());
-                setContent(doc.data().content)
-                setFileName(doc.data().name)
-                setIsLoaded(true)
-            }
+        if (user && user.uid && episodeID) {
+           
+            const noteDocRef = db.collection("users").doc(user.uid).collection("notes").doc(episodeID);
+            
+            noteDocRef.get()
+                .then(doc => {
+                    if (!doc.exists) {
+                        noteDocRef.set({
+                            name: "",
+                            content: "",
+                            createdAt: new Date(),
+                            id: episodeID
+                        })
+                        setIsLoaded(true)
+                    } else {
+                        console.log('Document data:', doc.data());
+                        setContent(doc.data().content)
+                        setFileName(doc.data().name)
+                        setIsLoaded(true)
+                    }
+                });
             setNoteID(noteDocRef)
-
-
         }
-        fetchData()
-    }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user])
 
-    const saveToDb = () => {
+
+
+    function saveToDb() {
+        // const { user } = store.getState().user;
+        // const noteDocRef = db.collection("users").doc(user.uid).collection("notes").doc(noteID);
         noteID.update({
             name: fileName,
             content,
             lastModified: new Date()
         });
+        toast.success("🎉 Your changes have been saved!");
         setUnsaveChanges(false)
-
-
-
-
-        
     }
     const onUnload = (event) => {
         event.preventDefault();
         event.returnValue = "You have unsaved changes!";
         return "You have unsaved changes!";
-      };
+    };
     useEffect(() => {
         if (unsaveChanges) {
-          window.addEventListener("beforeunload", onUnload);
+            window.addEventListener("beforeunload", onUnload);
         } else {
-          window.removeEventListener("beforeunload", onUnload);
+            window.removeEventListener("beforeunload", onUnload);
         }
-    
+
         return () => window.removeEventListener("beforeunload", onUnload);
-      });
+    });
 
     return (
-        <div>
-
-            <button onClick={getAccessToken}> Get access token </button>
-            <input ref={fileNameRef} value={fileName} onChange={(e) => { setFileName(e.target.value) }} />
-
-
-
-            <button onClick={saveToDb}>
-                Save
+        <div> 
+            <div className="player">
+             <iframe 
+            title="Spotify player"
+            key="iframe"
+      src={`https://open.spotify.com/embed/episode/${episodeID}`}
+                 width="1000"
+                 height="300"
+             frameborder="0"
+                allowtransparency="true"
+                 allow="encrypted-media"
+    />
+    </div>
+           
+          
+               File Title: 
+            <br/>
+            <div className="">
+             <input placeholder="File Title...." className="px-10 m-2 border text-2xl focus:bg-green-100"ref={fileNameRef} value={fileName} onChange={(e) => { setFileName(e.target.value) }} /> 
+              <button onClick={saveToDb} className="float-right bg-green-500 text-white font-semibold  hover:bg-green-700 m-3 p-2 rounded"  >
+            Save Changes
             </button>
-
-
-
-            <h2> Give text input here : </h2>
-            {isLoaded ? <Editor
-
+            </div>
+          
+            {
+        isLoaded ?
+                <div className="m-2 px-10 py-5 border min-h-full">
+            <Editor
                 defaultValue={content}
                 ref={contentRef}
                 onChange={(getValue) => {
-                     setContent(getValue())
-                     setUnsaveChanges(true)
-                    }
-                    //  ()=>{console.log("value is changed")}
+                    setContent(getValue())
+                    setUnsaveChanges(true)
                 }
 
-            // uploadImage={uploadImage}
-            // onShowToast={(message) => toast(message)}
-            /> : <h2>Loading....</h2>}
+                }
 
 
-            <button onClick={() => console.log(store.getState())}>
-                Get store value
-            </button>
-            <button onClick={()=>{console.log(unsaveChanges)}}>
-                is it saved?
+            onShowToast={(message) => toast(message)}
+            /> </div>: <h2>Loading....</h2>
+    }
+
+          
+
+{/*            
+            <button onClick={() => { console.log(unsaveChanges) }}>
+            is it saved?
             </button>
             <button onClick={() => console.log(content)}>
-                Get content
-            </button>
-
-        </div>
+            Get content
+            </button> */}
+<ToastContainer />
+        </div >
     )
 }
 
-export default _Editor
+export default (_Editor)

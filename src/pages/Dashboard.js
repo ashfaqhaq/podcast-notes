@@ -1,20 +1,17 @@
 import React, { Fragment } from 'react'
-import Sidebar from '../components/Sidebar'
-import { Alert } from 'antd';
-import Editor from '../components/Editor/Editor'
-import 'antd/dist/antd.css';
+
+import ClippedDrawer from '../components/ClippedDrawer'
+
+
 
 function Dashboard() {
     return (
         <Fragment>
-            <Sidebar/>
-           
-            Dashboard
-            <Alert
-             message="Warning text"
-             type="warning"
-             />
-             <Editor />
+            <div className="flex">
+              
+            <ClippedDrawer/>
+               
+             </div>
         </Fragment>
     )
 }
