@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { withRouter} from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { login } from '../features/userSlice';
-import { auth } from '../firebase';
+import { auth,db } from '../firebase';
 import Logo from '../images/logo_size.jpg'
 
 function Login() {
@@ -17,14 +17,14 @@ function Login() {
       e.preventDefault();
       auth.signInWithEmailAndPassword(email, password)
         .then(userAuth => {
-          dispatch(login({
-            email: userAuth.user.email,
-            uid: userAuth.user.uid,
-            displayName: userAuth.user.displayName,
-            profileUrl: userAuth.user.photoURL,
-          }))
-        }) 
-      
+            dispatch(login({
+              email: userAuth.user.email,
+              uid: userAuth.user.uid,
+              displayName: userAuth.user.displayName,
+              profileUrl: userAuth.user.photoURL,
+            }))
+          })
+        
         .catch(error => alert(error));
     };
   

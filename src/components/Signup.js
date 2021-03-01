@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {withRouter } from "react-router-dom"
 import { useDispatch } from 'react-redux';
 import { login } from '../features/userSlice';
-import { auth } from '../firebase';
+import { auth,db} from '../firebase';
 // eslint-disable-next-line no-unused-vars
 import GithubButton from 'react-github-login-button'
 import GoogleButton from 'react-google-button';
@@ -19,7 +19,16 @@ console.log(newUser)
   {var provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithPopup(provider)
       .then((userAuth) => {
-  
+        var userDocRef = db.collection("users").doc(userAuth.user.uid);
+        userDocRef.set({
+          'info': {
+            email: userAuth.user.email,
+            uid: userAuth.user.uid,
+            displayName: userAuth.user.displayName,
+            photoURL: userAuth.user.photoURL,
+          }
+        })
+       
         dispatch(login({
           email: userAuth.user.email,
           uid: userAuth.user.uid,
@@ -49,7 +58,7 @@ console.log(newUser)
     
       
       <div class="bg-hero">
-        <div class="container flex justify-center">
+        <div class="container grid sm:grid-cols-2 grid-cols-1 justify-center ">
          
         {signup?
         <div>
