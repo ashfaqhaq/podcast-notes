@@ -86,7 +86,9 @@ const Routes = React.lazy(()=>import("./Routing/Routes"))
     
    
     <div className="box-border font-montserrat">
-      { modalIsOpen?  <Modal
+      { modalIsOpen?  
+      <div className="flex">
+      <Modal
         isOpen={modalIsOpen}
         // onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
@@ -97,8 +99,8 @@ const Routes = React.lazy(()=>import("./Routing/Routes"))
           {/* <h2 ref={_subtitle => (subtitle = _subtitle)}>Hello</h2> */}
           <button className="flex flex-row-reverse" >X</button>
         <Signup />
-        </Modal>:null}
-      <Suspense fallback={<h1 className="mx-10 my-5">Loading</h1>}>
+        </Modal> </div>:null}
+      <Suspense fallback={<center><img alt="loading" src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fgiphy.com%2Fexplore%2Floading&psig=AOvVaw0mGA9yC4R1OrjNmnjqp5Hc&ust=1614650391321000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCICm2cn_je8CFQAAAAAdAAAAABAN"/></center>}>
       {/* <Header /> */}
 
      
