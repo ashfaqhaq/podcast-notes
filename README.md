@@ -1,70 +1,45 @@
-# Getting Started with Create React App
+PodcastKeep provides you with an interactive interface to note down your notes while you are listening to your favorite podcast.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**The Problem Statement:**
 
-## Available Scripts
+Retaining information has become more difficult than before. Due to which long format content such as Podcast barely get any attention, in spite of the fact that podcasts provide a plethora of knowledge to it's audience. 
 
-In the project directory, you can run:
+Due to the fact that podcasts provide so much valuable information that we as humans tend to forget the content. I soon realized this during the lockdown and start making notes.
 
-### `npm start`
+But there was an issue, I used to listen to some podcasts travelling outside or sitting in a cafe where writing down the notes wasn't practical.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+**Inspiration:**
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+When I started learning git, I was not aware on what and how MarkDown files work or how are the rules structured for them. I had not written a single Markdown file until 2019, but once understood how markdown worked I was completely blown away by the simplicity of the formatting and style of writing.
 
-### `npm test`
+**Idea:**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The idea was simply born out of the fact that I was not able to manage and organize multiple notebooks and sometimes I would have to retake all the notes because I had lost it.
 
-### `npm run build`
+Coming to the Project, I have used 
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- React on the frontend along with Redux-Toolkit for state management
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Firebase as a backend service
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Hosted using Aws Amplify.
 
-### `npm run eject`
+Live Link:  [PodcastKeep](https://dev9823.d20d8jqjompjzi.amplifyapp.com) 
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Github Repo: [Repo](https://github.com/ashfaqhaq/podcast-notes/)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+I will be uploading the Project Video in some time.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+I have personally learnt a lot from the project and would encourage everyone to try out new things and project which they didn't have earlier. 
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+By developing the backend on firebase and hosting on AWS Amplify, I feel confident on how a full stack application works
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+[Demo Gif](https://imgur.com/a/erDpz7k)
+- What's next?
+- A discussion forum allowing people to collaborate and share their insights
+- Sharing the podcast notes with your friends
+- Providing each user with a social identity on the website
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
