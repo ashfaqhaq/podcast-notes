@@ -4,7 +4,7 @@ import { login, selectUser } from './features/userSlice';
 import { auth } from './firebase';
 import Signup from './components/Signup'
 import Modal from 'react-modal';
-import Landing from './Pages/Landing'
+import Landing from './pages/Landing'
 import {  useHistory, withRouter } from 'react-router-dom';
 
 import Dashboard from './Pages/Dashboard'
