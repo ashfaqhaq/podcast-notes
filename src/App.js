@@ -7,7 +7,7 @@ import Modal from 'react-modal';
 import Landing from './pages/Landing'
 import {  useHistory, withRouter } from 'react-router-dom';
 
-import Dashboard from './Pages/Dashboard'
+import Dashboard from './pages/Dashboard'
 
 
 
