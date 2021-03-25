@@ -22,6 +22,7 @@ import { Switch,Route,useHistory } from 'react-router-dom'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Editor from '../components/Editor/Editor'
 import Notes from '../components/Notes'
+import Footer from '../components/Footer'
 import Search from '../components/Search'
 // import InboxIcon from '@material-ui/icons/InboxIcon';
 import EpisodeList from './EpisodeList';
@@ -212,7 +213,11 @@ const history = useHistory()
           </Route>
         </Switch>
       </div> 
+      <footer>
+      <Footer />
+      </footer>
       </div> 
+      
     </div>
   );
 }

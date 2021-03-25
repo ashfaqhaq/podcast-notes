@@ -119,8 +119,10 @@ const Routes = React.lazy(()=>import("./Routing/Routes"))
           {/* <CreateNotes /> */}
 
       {!user ? (
-       
+       <Fragment>
        <Landing /> 
+       <Footer />
+       </Fragment>
         ) : ( <Fragment> 
           
           <div>
@@ -130,6 +132,7 @@ const Routes = React.lazy(()=>import("./Routing/Routes"))
         
          
          <Dashboard />
+        
         {/* <SideDrawer />
          <ClippedDrawer />
          <Editor/> */}
@@ -148,7 +151,7 @@ const Routes = React.lazy(()=>import("./Routing/Routes"))
   
 
 
-    <Footer />
+   
     </Suspense> 
     </div>
     

@@ -10,8 +10,9 @@ function Dashboard() {
             <div className="flex">
               
             <ClippedDrawer/>
-               
+            
              </div>
+            
         </Fragment>
     )
 }
