@@ -1,3 +1,6 @@
+[Demo Gif](https://imgur.com/a/erDpz7k)
+
+
 PodcastKeep provides you with an interactive interface to note down your notes while you are listening to your favorite podcast.
 
 **The Problem Statement:**
@@ -36,7 +39,6 @@ By developing the backend on firebase and hosting on AWS Amplify, I feel confide
 
 
 
-[Demo Gif](https://imgur.com/a/erDpz7k)
 - What's next?
 - A discussion forum allowing people to collaborate and share their insights
 - Sharing the podcast notes with your friends
